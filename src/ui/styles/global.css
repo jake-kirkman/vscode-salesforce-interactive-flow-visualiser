@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.node-container {
+  --width-scaled: calc(var(--scale) * 20px);
+  --height-scaled: calc(var(--scale) * 20px);
+  top: calc((var(--offset-y) + var(--node-y) - 10px) * var(--scale));
+  left: calc((var(--offset-x) + var(--node-x) - 10px) * var(--scale));
+  width: var(--width-scaled);
+  height: var(--height-scaled);
+  z-index: 10;
+}
+
+.node-label {
+  left: calc(100% + 10px);
+  top: 0;
+}

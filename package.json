@@ -1,29 +1,40 @@
 {
   "name": "salesforce-flow-visualiser",
-	"displayName": "salesforce-flow-visualiser",
-	"description": "",
-	"version": "0.0.1",
-	"engines": {
+  "displayName": "Salesforce Interactive Flow Visualiser",
+  "description": "Interactive Flow Visualiser inside your VSCode",
+  "version": "0.0.5",
+  "icon": "media/icon.png",
+  "engines": {
     "vscode": "^1.84.2"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-    
-	],
-	"main": "./out/extension/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "salesforce-flow-visualiser.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "XML",
+    "Flows",
+    "Interactive",
+    "Visualiser",
+    "Salesforce"
+  ],
+  "author": {
+    "name": "Jake Kirkman"
+  },
+  "publisher": "JakeKirkman",
+  "activationEvents": [],
+  "main": "./out/extension/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "salesforce-flow-visualiser.visualise-flow",
+        "title": "Visualise Flow"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "webpack --mode production",
+    "compile:css": "postcss src/ui/styles/global.css -o out/ui/styles/global.css",
+    "compile": "npm run compile:css && webpack --mode production",
     "lint": "eslint src --ext ts",
     "watch": "webpack --mode development --watch",
     "pretest": "webpack --mode development && npm run lint",
@@ -38,12 +49,19 @@
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "@vscode/test-electron": "^1.6.2",
+    "autoprefixer": "^10.4.19",
     "css-loader": "^4.2.0",
     "eslint": "^8.1.0",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
     "glob": "^7.1.7",
     "mocha": "^9.1.3",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "postcss-loader": "^8.1.1",
+    "postcss-preset-env": "^9.5.13",
     "style-loader": "^1.2.1",
+    "svg-url-loader": "^8.0.0",
+    "tailwindcss": "^3.4.3",
     "ts-loader": "^9.2.5",
     "typescript": "^4.4.4",
     "webpack": "^5.52.1",
@@ -53,6 +71,8 @@
     "@salesforce/apex-node": "^3.0.2",
     "@salesforce/core": "^6.7.0",
     "@salesforce/soql-model": "^0.2.3",
-    "preact": "^10.20.1"
+    "fast-xml-parser": "^4.4.0",
+    "preact": "^10.20.1",
+    "reactflow": "^11.11.3"
   }
 }

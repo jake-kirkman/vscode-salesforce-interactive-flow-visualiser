@@ -23,7 +23,12 @@ const makeConfig = (argv, { entry, out, target, library = 'commonjs' }) => ({
         '@salesforce/apex-node': 'commonjs @salesforce/apex-node', // Tells Webpack to treat 'vscode' as an external module
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.css']
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+        alias: {
+          'react': 'preact/compat',
+          'react-dom/test-utils': 'preact/test-utils',
+          'react-dom': 'preact/compat'
+        }
     },
     module: {
         rules: [
@@ -44,6 +49,7 @@ const makeConfig = (argv, { entry, out, target, library = 'commonjs' }) => ({
             // Allow importing CSS modules:
             {
                 test: /\.css$/,
+                exclude: /node_modules/,
                 use: [
                     'style-loader',
                     {
@@ -53,7 +59,28 @@ const makeConfig = (argv, { entry, out, target, library = 'commonjs' }) => ({
                             modules: true,
                         },
                     },
+                    'postcss-loader'
                 ],
+            },
+            // Allow importing global CSS:
+            {
+                test: /\.css$/,
+                include: /node_modules/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ],
+            },
+            {
+              test: /\.svg$/,
+              use: [
+                {
+                  loader: 'svg-url-loader',
+                  options: {
+                    limit: 10000,
+                  },
+                },
+              ],
             },
         ],
     },
@@ -76,7 +103,7 @@ module.exports = (env, argv) => [
         ...makeConfig(argv, { entry: './src/ui/index.tsx', out: './out/ui/index.js', target: 'web', library: 'module' }),
         experiments: {
             outputModule: true,
-        },
+        }
     },
     makeConfig(argv, { entry: './src/extension/extension.ts', out: './out/extension/extension.js', target: 'node' }),
 ];
