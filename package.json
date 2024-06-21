@@ -3,6 +3,9 @@
   "displayName": "Salesforce Interactive Flow Visualiser",
   "description": "Interactive Flow Visualiser inside your VSCode",
   "version": "0.0.5",
+  "repository": {
+    "url": "https://github.com/jake-kirkman/vscode-salesforce-interactive-flow-visualiser"
+  },
   "icon": "media/icon.png",
   "engines": {
     "vscode": "^1.84.2"
@@ -27,7 +30,8 @@
     "commands": [
       {
         "command": "salesforce-flow-visualiser.visualise-flow",
-        "title": "Visualise Flow"
+        "title": "Visualise Flow",
+        "category": "Flows"
       }
     ]
   },
