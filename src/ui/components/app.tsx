@@ -15,7 +15,10 @@ export default function App() {
 
       switch(messageType) {
         case 'flow-data':
-          fireEvent(Event.flowLoaded, pEvent.data.flow);
+          fireEvent(Event.flowLoaded, pEvent.data);
+          break;
+        case 'config-change':
+          fireEvent(Event.configChange, pEvent.data.configs);
           break;
         default:
           break;

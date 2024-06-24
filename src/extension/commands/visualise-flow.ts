@@ -1,7 +1,11 @@
 import * as vscode from "vscode";
 import { parseFlowXml } from "../workers/flow-xml-worker";
+import { generateWebviewConfigurationObject } from "../workers/configuration-worker";
+import { WEBVIEW_CONFIGS } from "../constants/configurations";
 
 export default function visualiseFlow(context: vscode.ExtensionContext): void {
+  //Register config 
+  //Register Command
   context.subscriptions.push(vscode.commands.registerCommand('salesforce-flow-visualiser.visualise-flow', async () => {
     try {
       //Parse XML
@@ -9,7 +13,7 @@ export default function visualiseFlow(context: vscode.ExtensionContext): void {
       // Create webview
       let webview = vscode.window.createWebviewPanel(
         'salesforce-flow-visualiser',
-        'Salesforce Flow Visualiser',
+        `${flowData.fileName.substring(flowData.fileName.lastIndexOf('\\') + 1)} | Salesforce Flow Visualiser`,
         vscode.ViewColumn.One,
         {
           enableScripts: true,
@@ -17,12 +21,32 @@ export default function visualiseFlow(context: vscode.ExtensionContext): void {
           localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'out', 'ui')]
         }
       );
+      //Send configuration to webview
+      const sendConfigToWebview = () => {
+        webview.webview.postMessage({
+          type: 'config-change', 
+          configs: generateWebviewConfigurationObject()
+        });
+      }
+      //Setup config change handler
+      vscode.workspace.onDidChangeConfiguration(
+        (pEvent) => {
+          //Make sure we only send config to webview if it's one of the ones we send
+          if(WEBVIEW_CONFIGS.some(pConfig => pEvent.affectsConfiguration(pConfig.key))) {
+            sendConfigToWebview();
+          }
+        }
+      );
       //Setup message comms with webview
       webview.webview.onDidReceiveMessage(
         (pMessage) => {
           console.log(`## Message Received: `, pMessage);
           if(pMessage.command === 'load') {
-            webview.webview.postMessage({type: 'flow-data', flow: flowData});
+            webview.webview.postMessage({
+              type: 'flow-data', 
+              flow: flowData,
+              initialConfig: generateWebviewConfigurationObject()
+            });
           }
         }
       );

@@ -3,7 +3,7 @@
 Visualise your Salesforce Flows inside of your VSCode environment using this extension!
 
 You'll be able to interact with the flow nodes like you would in any flow diagramming tool, meaning you can move the view around,
-drag nodes around, see connections with similar UI to what you will find inside of Salesforce.
+drag nodes around, see connections. With a UI somewhat similar to what you will find inside of Salesforce's native flow editor.
 
 ![Demo of extension](/media/visualise-flow-demo.gif)
 
@@ -30,7 +30,16 @@ Here are some features I'm planning on adding to this extension, feel free to su
 
 ## Extension Settings
 
-Nothing yet! Will be soon
+- `salesforce-interactive-flow-visualiser.webview.nodePositionScaling`
+  - Scaling applied to each node's coordinates on initial render to help space things out
+- `salesforce-interactive-flow-visualiser.webview.displayMinimap`
+  - Whether the minimap in the bottom right should be displayed
+- `salesforce-interactive-flow-visualiser.webview.displayControls`
+  - Whether the controls in the bottom left should be displayed
+- `salesforce-interactive-flow-visualiser.webview.animateArrowsByDefault`
+  - Whether the connections between nodes should be animated by default
+- `salesforce-interactive-flow-visualiser.webview.edgeType`
+  - How should each node be connected (Straight, curved, stepped etc)
 
 ## Known Issues
 
@@ -39,7 +48,7 @@ Nothing yet! Will be soon
 If you find any issues, feel free to report them here: 
 https://github.com/jake-kirkman/vscode-salesforce-interactive-flow-visualiser/issues
 
-Flows are quite complex and have many branching possibilities, so reporting issues will make this a better extension for everyone 
+Flows are quite complex and have many branching possibilities, so reporting issues will help me improve this extension and make this a better extension for everyone 
 
 ## Development notes
 

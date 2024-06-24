@@ -12,7 +12,8 @@ import EventListenerIdentifier from "../models/utility/event-listener-identifier
 const EVENT_LISTENERS: Record<Event, ((...pParams: any) => void)[]> = {
   [Event.flowLoaded]: [],
   [Event.configLoaded]: [],
-  [Event.animateArrows]: []
+  [Event.animateArrows]: [],
+  [Event.configChange]: []
 };
 
 /*=========================================================
@@ -34,7 +35,7 @@ export function registerListener(pEvent: Event, pCallback: (...pParams: any) => 
 
 export function unregisterListener(pIdentifier: EventListenerIdentifier): void {
   const index = EVENT_LISTENERS[pIdentifier.eventType]?.indexOf(pIdentifier.callbackFunction);
-  if(index && index !== -1) {
+  if(index != null && index !== -1) {
     EVENT_LISTENERS[pIdentifier.eventType].splice(index, 1);
   }
 }

@@ -21,11 +21,11 @@ import ICON_PLAY from '../assets/play.svg';
     Constants
 =========================================================*/
 
-const THEME_START = "text-white bg-[#0B827C] rounded p-2";
-const THEME_DATA = "text-white bg-[#FF538A] rounded p-2";
-const THEME_LOGIC = "text-white bg-[#DD7A01] rounded p-2";
-const THEME_SCREEN = "text-white bg-[#1B96FF] rounded p-2";
-const THEME_INTERACTION = "text-white bg-[#032D60] rounded p-2";
+const THEME_START = "max-w-48 text-white bg-[#0B827C] rounded p-2";
+const THEME_DATA = "max-w-48 text-white bg-[#FF538A] rounded p-2";
+const THEME_LOGIC = "max-w-48 text-white bg-[#DD7A01] rounded p-2";
+const THEME_SCREEN = "max-w-48 text-white bg-[#1B96FF] rounded p-2";
+const THEME_INTERACTION = "max-w-48 text-white bg-[#032D60] rounded p-2";
 
 export const TYPE_CONSTANTS: Record<string, {icon: string, theme: string, canFault: boolean}> = {
   screen: {

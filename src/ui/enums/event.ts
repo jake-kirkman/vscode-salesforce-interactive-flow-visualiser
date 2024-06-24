@@ -1,6 +1,7 @@
 enum Event {
   flowLoaded = 'flowLoaded',
   configLoaded = 'configLoaded',
-  animateArrows = 'animateArrows'
+  animateArrows = 'animateArrows',
+  configChange = 'configChange'
 }
 export default Event;

@@ -10,6 +10,8 @@ import Flow from "../models/flow/flow";
 import { registerListener, unregisterListener } from "../workers/event-worker";
 import Event from "../enums/event";
 import Toolbar from "./overlays/toolbar";
+import ConfigChangeEvent from "../models/events/config-change-event";
+import EventListenerUtility from "./utility/event-listener-utility";
 
 const NODE_TYPES = {
   loop: FlowLoopNode,
@@ -33,6 +35,7 @@ const NODE_TYPES = {
 export default function FlowVisualiser() {
 
   //State
+  const [config, setConfig] = useState<ConfigChangeEvent>();
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
 
@@ -101,6 +104,58 @@ export default function FlowVisualiser() {
     [nodes]
   );
 
+  const onAnimateArrows = useCallback(
+    () => {
+      console.log('##Item : Setting Edges : ');
+      setEdges(
+        (pCurrentEdges) => {
+          const newEdges: Edge[] = [];
+          pCurrentEdges.forEach(
+            pEdge => {
+              pEdge.animated = !pEdge.animated;
+              newEdges.push(pEdge);
+            }
+          );
+          return newEdges;
+        }
+      );
+    },
+    [edges]
+  );
+
+  const onFlowLoad = useCallback(
+    (pFlowData: {flow: Flow, initialConfig: ConfigChangeEvent}) => {
+      try {
+        console.log('##Item : Loading Flow : ');
+        setConfig(pFlowData.initialConfig)
+        const result = convertFlowToReactFlow(pFlowData.initialConfig, pFlowData.flow);
+        setNodes(result.nodes);
+        setEdges(result.edges);
+      } catch(ex) {
+        console.error(ex);
+      }
+    }, 
+    [config]
+  );
+
+  const onConfigChange = useCallback(
+    (pConfig: ConfigChangeEvent) => {
+      console.log('##Item : config : ', pConfig);
+      if(config?.edgeType !== pConfig?.edgeType) {
+        setEdges(
+          pEdges => pEdges.map(
+            pEdge => ({
+              ...pEdge,
+              type: pConfig.edgeType
+            })
+          )
+        );
+      }
+      setConfig(pConfig);
+    },
+    [config]
+  );
+
   //Startup
   useEffect(
     () => {
@@ -113,49 +168,13 @@ export default function FlowVisualiser() {
     [nodes]
   );
 
-  //Setup listeners
-  useEffect(
-    () => {
-      const disposables = [
-        registerListener(Event.flowLoaded, (pFlowData) => {
-          try {
-            console.log('##Item : Loading Flow : ');
-            const result = convertFlowToReactFlow(pFlowData);
-            setNodes(result.nodes);
-            setEdges(result.edges);
-          } catch(ex) {
-            console.error(ex);
-          }
-        }),
-        registerListener(Event.animateArrows, () => {
-          setEdges(
-            (pCurrentEdges) => {
-              const newEdges: Edge[] = [];
-              pCurrentEdges.forEach(
-                pEdge => {
-                  pEdge.animated = !pEdge.animated;
-                  newEdges.push(pEdge);
-                }
-              );
-              return newEdges;
-            }
-          );
-        })
-      ];
-      return () => {
-        disposables.forEach(
-          pDisposable => unregisterListener(pDisposable)
-        );
-      };
-    },
-    []
-  );
-
-
   return (
     <div 
       className="w-full h-full relative overflow-clip"
     >
+      <EventListenerUtility event={Event.flowLoaded} onEvent={onFlowLoad}/>
+      <EventListenerUtility event={Event.animateArrows} onEvent={onAnimateArrows}/>
+      <EventListenerUtility event={Event.configChange} onEvent={onConfigChange}/>
       {
         nodes.length > 0 ? (
           <ReactFlow
@@ -165,8 +184,8 @@ export default function FlowVisualiser() {
             nodesConnectable={false}
             nodeTypes={NODE_TYPES}
           >
-            <Controls/>
-            <MiniMap pannable zoomable/>
+            {config?.displayControls ? <Controls/> : <></>}
+            {config?.displayMinimap ? <MiniMap pannable zoomable/> : <></>}
             <Panel position={Position.Right}>
               <Toolbar/>
             </Panel>

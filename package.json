@@ -2,7 +2,7 @@
   "name": "salesforce-flow-visualiser",
   "displayName": "Salesforce Interactive Flow Visualiser",
   "description": "Interactive Flow Visualiser inside your VSCode",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "repository": {
     "url": "https://github.com/jake-kirkman/vscode-salesforce-interactive-flow-visualiser"
   },
@@ -33,7 +33,49 @@
         "title": "Visualise Flow",
         "category": "Flows"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Salesforce Interactive Flow Visualiser",
+      "properties": {
+        "salesforce-interactive-flow-visualiser.webview.nodePositionScaling": {
+          "type": "number",
+          "description": "To help space nodes out to be more immediately readable, a scale is applied to each node's x and y coordinate, this is how much to scale by. 1 = no scaling applied.",
+          "default": 1.5,
+          "order": 0,
+          "minimum": 0.1
+        },
+        "salesforce-interactive-flow-visualiser.webview.displayMinimap": {
+          "type": "boolean",
+          "description": "Display the minimap displayed in the bottom right?",
+          "default": true,
+          "order": 1
+        },
+        "salesforce-interactive-flow-visualiser.webview.displayControls": {
+          "type": "boolean",
+          "description": "Display the controls in the bottom left?",
+          "default": true,
+          "order": 2
+        },
+        "salesforce-interactive-flow-visualiser.webview.animateArrowsByDefault": {
+          "type": "boolean",
+          "description": "When you first load the visualiser, should the connections begin animated?",
+          "default": false,
+          "order": 3
+        },
+        "salesforce-interactive-flow-visualiser.webview.edgeType": {
+          "type": "string",
+          "description": "What sort of connection between nodes would you like?",
+          "default": "smoothstep",
+          "order": 4,
+          "enum": [
+            "straight",
+            "step",
+            "smoothstep",
+            "simplebezier"
+          ]
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
