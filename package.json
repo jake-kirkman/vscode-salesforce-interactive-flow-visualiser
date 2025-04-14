@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/jake-kirkman/vscode-salesforce-interactive-flow-visualiser"
   },
-  "icon": "media/icon.png",
+  "icon": "media/logo.png",
   "engines": {
     "vscode": "^1.84.2"
   },
