@@ -56,6 +56,10 @@ For those interested, this was build using Preact and packaging the extension us
 
 ## Release Notes
 
+### 0.2.0
+
+Added the ability to sort nodes using Dagre
+
 ### 0.1.0
 
 Initial Release.

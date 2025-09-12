@@ -29,6 +29,12 @@ export default function Toolbar() {
             >
               Animate Arrows
             </button>
+            <button 
+              className="p-1 w-full rounded border dark:border-white border-black"
+              onClick={() => fireEvent(Event.sortNodes, {})}
+            >
+              Sort Nodes
+            </button>
             {/* <button 
               className="p-1 w-full rounded border dark:border-white border-black"
             >

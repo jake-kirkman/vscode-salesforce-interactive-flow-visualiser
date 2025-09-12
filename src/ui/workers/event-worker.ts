@@ -11,6 +11,7 @@ import EventListenerIdentifier from "../models/utility/event-listener-identifier
 
 const EVENT_LISTENERS: Record<Event, ((...pParams: any) => void)[]> = {
   [Event.flowLoaded]: [],
+  [Event.sortNodes]: [],
   [Event.configLoaded]: [],
   [Event.animateArrows]: [],
   [Event.configChange]: []

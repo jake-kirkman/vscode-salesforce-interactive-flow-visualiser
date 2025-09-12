@@ -1,4 +1,5 @@
 import { h, Fragment } from "preact";
+import dagre from '@dagrejs/dagre';
 import ReactFlow, { Node, Edge, applyNodeChanges, Controls, MiniMap, NodeChange, Panel, Position } from "reactflow";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import FlowElement from "../models/flow/flow-element";
@@ -123,6 +124,47 @@ export default function FlowVisualiser() {
     [edges]
   );
 
+  const onSortNodes = useCallback(
+    () => {
+      console.log('##Item : Organising Nodes : ');
+      //Create dagre instance
+      const g = new dagre.graphlib.Graph();
+      //Set object
+      g.setGraph({});
+      //Default function
+      g.setDefaultEdgeLabel(function() { return {}; });
+      //Add nodes
+      nodes.forEach(
+        pNode => {
+          g.setNode(pNode.id, { label: pNode.id, width: pNode.width!, height: pNode.height! });
+        }
+      );
+      //Add edges
+      edges.forEach(
+        pEdge => {
+          g.setEdge(pEdge.source, pEdge.target);
+        }
+      );
+      //Layout
+      dagre.layout(g);
+      //Apply changes
+      setNodes(
+        pOldNodes => {
+          const newNodes = pOldNodes.map(
+            pNode => {
+              const sortedNode = g.node(pNode.id);
+              pNode.position.x = sortedNode.x;
+              pNode.position.y = sortedNode.y;
+              return pNode;
+            }
+          );
+          return newNodes;
+        }
+      )
+    },
+    [nodes, edges]
+  );
+
   const onFlowLoad = useCallback(
     (pFlowData: {flow: Flow, initialConfig: ConfigChangeEvent}) => {
       try {
@@ -174,6 +216,7 @@ export default function FlowVisualiser() {
     >
       <EventListenerUtility event={Event.flowLoaded} onEvent={onFlowLoad}/>
       <EventListenerUtility event={Event.animateArrows} onEvent={onAnimateArrows}/>
+      <EventListenerUtility event={Event.sortNodes} onEvent={onSortNodes}/>
       <EventListenerUtility event={Event.configChange} onEvent={onConfigChange}/>
       {
         nodes.length > 0 ? (
